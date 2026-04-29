@@ -6,4 +6,4 @@ const userLogSchema = new mongoose.Schema({
   role: { type: String, default: 'admin' }
 });
 
-module.exports = mongoose.model('userLog', userLogSchema);
+module.exports = mongoose.model('UserLog', userLogSchema);
