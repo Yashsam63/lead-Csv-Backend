@@ -3,10 +3,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const multer = require('multer');
 const csv = require('csvtojson');
-const User = require('./User');
+const User = require('./models/User');
 const fs = require('fs');
 const cors = require('cors');
-const Lead = require('./User');
+const Lead = require('./models/User');
 
 
 const app = express();
@@ -27,7 +27,7 @@ app.get('/', (req, res) => {
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const userLog = require('./UserLog'); // Path check kar lena bhai
+const userLog = require('./models/UserLog'); // Path check kar lena bhai
 
 const JWT_SECRET = process.env.JWT_SECRET; // Isse secure rakhna
 
