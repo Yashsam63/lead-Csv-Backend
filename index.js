@@ -165,6 +165,17 @@ app.post('/leads/delete-multiple', async (req, res) => {
     }
 });
 
+app.post('/check-file', async (req, res) => {
+    try {
+        const { fileName } = req.body;
+        // Hum check kar rahe hain ki kya is file name se koi lead metadata mein saved hai
+        const exists = await User.findOne({ "metadata.raw_format": fileName });
+        res.json({ exists: !!exists });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // --- VERCEL EXPORT (Zaroori) ---
 module.exports = app;
 

@@ -62,6 +62,8 @@ router.get('/search', async (req, res) => {
 
                 { company_name: { $regex: regex } },
 
+                { "metadata.raw_format" : { $regex: regex } },
+
                 // 4. Sent Date Search (Nested inside metadata)
                 // Note: Schema mein sent_date String hai, isliye regex direct kaam karega
                 { "metadata.sent_date": { $regex: regex } },

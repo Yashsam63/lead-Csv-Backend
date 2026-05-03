@@ -42,6 +42,7 @@ router.post('/upload', upload.array('files'), async (req, res) => {
 
         // 2. Loop through every file
         for (const file of req.files) {
+            const fileName = file.originalname;
             const workbook = xlsx.read(file.buffer, { type: 'buffer', cellDates: true });
             let rows = [];
 
@@ -135,7 +136,7 @@ router.post('/upload', upload.array('files'), async (req, res) => {
                         generated_by: generatedBy || "",
                         template_used: template || "",
                         sent_date: smartFormatDate(finalSentDate),
-                        raw_format: "God_Mode_v4_Final"
+                       raw_format: fileName 
                     }
                 };
             }).filter(item => item !== null);
