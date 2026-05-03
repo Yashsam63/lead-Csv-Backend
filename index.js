@@ -26,7 +26,7 @@ mongoose.connect(process.env.MONGO_URI)
     .catch(err => console.error("❌ Connection error:", err));
 
 app.get('/', (req, res) => {
-    res.send('Welcome to the backend server!');
+    res.send('Welcome to the backend server! 2');
 });
 
 app.use('/', uploadRoute);
