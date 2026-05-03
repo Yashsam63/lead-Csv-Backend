@@ -45,18 +45,25 @@ app.get('/leads/recent', async (req, res) => {
 // GET /export
 app.get('/export', async (req, res) => {
     try {
-        const { start, end, generator } = req.query;
+        // 1. Destructure raw_format from query params
+        const { start, end, generator, raw_format } = req.query;
         let query = {};
 
-        // 1. Generator Filter
+        // 2. Generator Filter
         if (generator && generator.trim() !== "") {
             query["metadata.generated_by"] = { $regex: generator.trim(), $options: 'i' };
         }
 
-        // Saara data fetch karo
+        // 3. File Name (raw_format) Filter - ADDED THIS
+        if (raw_format && raw_format.trim() !== "") {
+            // Regex use kar rahe hain taaki agar user 'Leads' likhe toh 'Leads.csv' bhi mil jaye
+            query["metadata.raw_format"] = { $regex: raw_format.trim(), $options: 'i' };
+        }
+
+        // Saara data fetch karo based on filters
         let data = await Lead.find(query).lean();
 
-        // 2. Date Filter Logic (In-Memory)
+        // 4. Date Filter Logic (In-Memory)
         if (start || end) {
             const startDate = start ? new Date(start) : null;
             const endDate = end ? new Date(end) : null;
@@ -66,6 +73,7 @@ app.get('/export', async (req, res) => {
                 const dateStr = item.metadata?.sent_date; 
                 if (!dateStr) return false;
 
+                // String "DD-MM-YYYY" ko Date object mein convert karna
                 const [day, month, year] = dateStr.split('-');
                 const itemDate = new Date(`${year}-${month}-${day}`);
 
@@ -75,8 +83,7 @@ app.get('/export', async (req, res) => {
             });
         }
 
-        // 3. Poora data bhej do bina mapping ke
-        // Taaki frontend ko saari nested fields (metadata.template_used etc.) mil sakein
+        // 5. Result bhejo
         res.json(data);
 
     } catch (error) {
